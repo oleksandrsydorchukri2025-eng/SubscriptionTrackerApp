@@ -5,9 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    // Сюди треба буде вписати адресу твого сервера!
-    private const val BASE_URL = "https://твоя-адреса-сервера.com/api/"
-
+    // Має стати (встав посилання, яке тобі дали):
+    private const val BASE_URL = "https://kolo-backend-api.onrender.com/"
     val apiService: ApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

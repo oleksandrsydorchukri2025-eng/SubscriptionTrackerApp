@@ -85,8 +85,8 @@ class DashboardFragment : Fragment() {
 
         for (sub in subs) {
             when (sub.currency.uppercase()) {
-                "USD", "$" -> totalUah += sub.price * 40.0
-                "EUR", "€" -> totalUah += sub.price * 43.0
+                "USD", "$" -> totalUah += sub.price * 43.0
+                "EUR", "€" -> totalUah += sub.price * 45.0
                 "UAH", "ГРН" -> totalUah += sub.price
                 else -> totalUah += sub.price
             }

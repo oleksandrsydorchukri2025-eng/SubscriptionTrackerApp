@@ -17,20 +17,23 @@ class TokenManager(private val context: Context) {
         private val TOKEN_KEY = stringPreferencesKey("jwt_token")
     }
 
-    // Функція для ЗБЕРЕЖЕННЯ токену
     suspend fun saveToken(token: String) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = token
         }
     }
 
-    // Функція для ЧИТАННЯ токену
     val getToken: Flow<String?> = context.dataStore.data.map { preferences ->
         preferences[TOKEN_KEY]
     }
 
-    // Функція для ВИДАЛЕННЯ токену (знадобиться для кнопки "Вийти")
+
     suspend fun clearToken() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(TOKEN_KEY)
+        }
+    }
+    suspend fun deleteToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(TOKEN_KEY)
         }

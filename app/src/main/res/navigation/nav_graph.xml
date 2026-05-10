@@ -42,5 +42,8 @@
         android:id="@+id/subscriptionDetailsFragment"
         android:name="com.example.subscriptiontracker.SubscriptionDetailsFragment"
         android:label="SubscriptionDetailsFragment" />
+    <action
+        android:id="@+id/action_dashboardFragment_to_loginFragment"
+        app:destination="@id/loginFragment" />
 
 </navigation>
