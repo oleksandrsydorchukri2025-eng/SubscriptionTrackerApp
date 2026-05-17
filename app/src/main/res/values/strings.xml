@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Kolo</string>
+
+    <string name="menu_subscription_list">Список</string>
+    <string name="menu_add_subscription">Додати</string>
+    <string name="menu_settings">Налаштування</string>
+    <string name="screen_add_title">Нова підписка</string>
+
+    <string name="add_sub_name_label">Назва (напр. Netflix)</string>
+    <string name="add_sub_price_label">Ціна (напр. 150 грн)</string>
+    <string name="add_sub_save_btn">Зберегти</string>
+
+    <string name="settings_title">Налаштування профілю</string>
+    <string name="dark_theme">Темна тема</string>
+    <string name="language">Мова: Українська</string>
+
+    <string name="error_title">Щось пішло не так</string>
+    <string name="button_retry">Спробувати знову</string>
+</resources>
