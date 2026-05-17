@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Kolo"
+rootProject.name = "SubscriptionTracker"
 include(":app")
