@@ -7,6 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow // ДОДАНО для списку
+import kotlinx.coroutines.flow.StateFlow // ДОДАНО для списку
+import kotlinx.coroutines.flow.asStateFlow // ДОДАНО для списку
 
 class AddSubscriptionViewModel : ViewModel() {
     var name by mutableStateOf("")
@@ -39,14 +42,29 @@ class AddSubscriptionViewModel : ViewModel() {
     // ДОДАНО: Змінна, яка керує тим, чи показувати сповіщення
     var showSuccessNotification by mutableStateOf(false)
 
+    // ДОДАНО: Наш список (Пам'ять програми)
+    private val _subscriptions = MutableStateFlow<List<Subscription>>(emptyList())
+    val subscriptions: StateFlow<List<Subscription>> = _subscriptions.asStateFlow()
+
     fun validateAndSave() {
         nameError = name.isBlank()
 
-        val priceValue = price.toDoubleOrNull()
-        priceError = price.isBlank() || priceValue == null || priceValue <= 0
+        val priceValue = price.toDoubleOrNull() ?: 0.0
+        priceError = price.isBlank() || priceValue <= 0.0
 
         val isValid = !nameError && !priceError
         if (isValid) {
+            // ДОДАНО: Пакуємо дані у нашу "папку" Subscription і зберігаємо у список
+            val newSub = Subscription(
+                name = name,
+                price = price,
+                currency = selectedCurrency,
+                color = selectedColor,
+                icon = selectedIcon
+            )
+            _subscriptions.value = _subscriptions.value + newSub
+
+            // Очищаємо поля після збереження
             name = ""
             price = ""
             selectedCurrency = currencies[0]

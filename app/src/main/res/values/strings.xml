@@ -1,8 +1,10 @@
 <resources>
-
-    <string name="menu_subscription_list">Список</string>
+    <string name="menu_subscription_list">Підписки</string>
     <string name="menu_add_subscription">Додати</string>
+    <string name="menu_analytics">Аналітика</string>
     <string name="menu_settings">Налаштування</string>
+
+
     <string name="screen_add_title">Нова підписка</string>
 
     <string name="add_sub_name_label">Назва (напр. Netflix)</string>
@@ -16,4 +18,5 @@
     <string name="error_title">Щось пішло не так</string>
     <string name="button_retry">Спробувати знову</string>
     <string name="app_name">SubscriptionTracker</string>
+
 </resources>

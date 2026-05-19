@@ -3,6 +3,7 @@ package com.example.kolo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import com.example.subscriptiontracker.R // Імпорт правильного класу ресурсів проєкту
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
@@ -18,6 +19,7 @@ import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
+    // Тепер це зчитується з правильного StateFlow потоку!
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -54,25 +56,37 @@ fun SuccessScreen(viewModel: ProfileViewModel) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // ПІДКЛЮЧЕНО: реальний стан перемикача з ViewModel
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(stringResource(id = R.string.dark_theme))
-            Switch(checked = false, onCheckedChange = {})
+            Switch(
+                checked = viewModel.notificationsEnabled,
+                onCheckedChange = { viewModel.notificationsEnabled = it }
+            )
         }
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
+        // ПІДКЛЮЧЕНО: відображення поточної валюти та курсу
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(id = R.string.language))
-            TextButton(onClick = {}) {
-                Text("Змінити")
+            Column {
+                Text(stringResource(id = R.string.language)) // Або змініть на іншу назву
+                Text(
+                    text = "Курс: ${viewModel.currentExchangeRate}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
+            }
+            TextButton(onClick = { /* Тут логіка зміни валюти */ }) {
+                Text("Основна: ${viewModel.selectedCurrency}")
             }
         }
     }
@@ -107,7 +121,6 @@ fun LoadingScreen() {
                     .size(100.dp)
                     .background(Color.LightGray, CircleShape)
             )
-
             Spacer(modifier = Modifier.height(32.dp))
 
             repeat(3) {

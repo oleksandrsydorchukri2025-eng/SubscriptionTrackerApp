@@ -1,6 +1,7 @@
 package com.example.kolo
 
 import androidx.compose.animation.*
+import com.example.subscriptiontracker.R // ДОДАНО: Імпорт правильного класу ресурсів проєкту
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,7 +34,7 @@ fun AddSubscriptionScreen(viewModel: AddSubscriptionViewModel) {
     // Box дозволяє накладати елементи один на одного (плашку поверх форми)
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // Тут наша основна форма (усе без змін)
+        // Тут наша основна форма
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +59,10 @@ fun AddSubscriptionScreen(viewModel: AddSubscriptionViewModel) {
                 isError = viewModel.nameError,
                 supportingText = {
                     if (viewModel.nameError) {
-                        Text("Назва не може бути порожньою", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            "Назва не може бути порожньою",
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                 },
                 modifier = Modifier.fillMaxWidth(0.8f)
@@ -102,7 +106,6 @@ fun AddSubscriptionScreen(viewModel: AddSubscriptionViewModel) {
                         },
                         modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable)
                     )
-
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
@@ -191,40 +194,6 @@ fun AddSubscriptionScreen(viewModel: AddSubscriptionViewModel) {
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
                 Text(stringResource(id = R.string.add_sub_save_btn))
-            }
-        }
-
-        // ДОДАНО: Наша кастомна плашка (Top Banner), яка виїжджає зверху
-        AnimatedVisibility(
-            visible = viewModel.showSuccessNotification,
-            enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
-            exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 16.dp) // Відступ від верхнього краю екрана
-        ) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer, // Використовуємо контрастний колір
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                modifier = Modifier.fillMaxWidth(0.9f)
-            ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Успіх"
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Підписку успішно додано!",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
             }
         }
     }

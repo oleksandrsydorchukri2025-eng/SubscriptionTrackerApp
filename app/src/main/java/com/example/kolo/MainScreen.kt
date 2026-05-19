@@ -2,12 +2,13 @@ package com.example.kolo
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import com.example.subscriptiontracker.R // ДОДАНО: Імпорт правильного класу ресурсів проєкту
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -17,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun MainScreen(
@@ -60,7 +65,7 @@ fun MainScreen(
                         )
                         NavigationBarItem(
                             icon = { Icon(Icons.Default.Star, contentDescription = null) },
-                            label = { Text("Аналітика") },
+                            label = { Text(stringResource(R.string.menu_analytics)) }, // ВИПРАВЛЕНО ТУТ!
                             selected = selectedTabIndex == 2,
                             onClick = { selectedTabIndex = 2 }
                         )
@@ -93,42 +98,82 @@ fun MainScreen(
 }
 
 @Composable
-fun TopNotificationBar(
-    message: String,
-    isVisible: Boolean,
-    onDismiss: () -> Unit
-) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
-        modifier = Modifier
+fun TopNotificationBar(message: String, isVisible: Boolean, onDismiss: () -> Unit) {
+    // Якщо сповіщення невидиме, просто не малюємо його
+    if (!isVisible) return
+
+    // Малюємо робочу плашку
+    androidx.compose.foundation.layout.Box(
+        modifier = androidx.compose.ui.Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .statusBarsPadding()
+            .background(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+            )
+            .padding(16.dp)
+            .clickable { onDismiss() } // Закриваємо при кліку
     ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            modifier = Modifier.clickable { onDismiss() }
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.onTertiaryContainer
+        )
+    }
+}
+
+@Composable
+fun SubscriptionListScreen() {
+    // Тимчасові дані для красивого відображення (поки не підключите базу даних)
+    val dummySubscriptions = listOf(
+        "Netflix" to "200 ₴",
+        "Spotify Premium" to "150 ₴",
+        "YouTube Premium" to "99 ₴",
+        "Google One" to "45 ₴"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Мої підписки",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp, top = 8.dp)
+        )
+
+        // Сам список підписок, який можна скролити
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notification",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+            items(dummySubscriptions) { sub ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = sub.first, // Назва сервісу
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            text = sub.second, // Ціна
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
         }
     }

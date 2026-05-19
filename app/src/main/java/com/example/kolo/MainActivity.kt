@@ -4,8 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import com.example.kolo.ui.theme.KoloTheme
+import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
@@ -15,21 +19,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KoloTheme {
-                // Стан, який визначає, чи показувати зараз екран завантаження
-                var showSplash by remember { mutableStateOf(true) }
+            // Використовуємо базову системну тему, яка 100% є і ніколи не впаде
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    var showSplash by remember { mutableStateOf(true) }
 
-                // Запускаємо таймер на 2 секунди
-                LaunchedEffect(Unit) {
-                    delay(2000) // 2000 мілісекунд = 2 секунди
-                    showSplash = false // Вимикаємо Splash Screen
-                }
+                    LaunchedEffect(Unit) {
+                        delay(2000) // Повісимо заставку на 2 секунди
+                        showSplash = false
+                    }
 
-                // Логіка перемикання екранів
-                if (showSplash) {
-                    SplashScreen()
-                } else {
-                    MainScreen(profileViewModel, addSubscriptionViewModel)
+                    if (showSplash) {
+                        // Звичайний текст замість XML-картинок, щоб уникнуть NotFoundException
+                        Surface(modifier = Modifier.fillMaxSize()) {
+                            Text("Завантаження Kolo (Subs.ua)...")
+                        }
+                    } else {
+                        // Наш головний екран програми
+                        MainScreen(profileViewModel, addSubscriptionViewModel)
+                    }
                 }
             }
         }
